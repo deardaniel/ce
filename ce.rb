@@ -2,44 +2,38 @@ require 'mechanize'
 require 'icalendar'
 require 'yaml'
 
-def login(mechanize, username, password)
-  login_url = 'https://loginc.benesse.ne.jp/ce/login'
-  page = mechanize.get(login_url)
-  form = page.form(:name=>'login')
-  form.field_with(:name=>'usr_name').value = username
-  form.field_with(:name=>'usr_password').value = password
-  form.submit
-end
+require_relative 'lib/challenge_english'
+require_relative 'lib/comiru'
 
-
-def get_lessons(mechanize, page)
-  dates = page.search('.dataList dt')
-  times = page.search('.dataList dd')
-  dates.map.with_index do |date, i|
-    month, day = date.text.scan(/(\d\d)\/(\d\d)/).first
-    start_hour, start_min, end_hour, end_min = times[i].text.scan(/(\d\d):(\d\d)～(\d\d):(\d\d)/).first
-
-    {
-      start_time: DateTime.new(Date.today.year, month.to_i, day.to_i, start_hour.to_i, start_min.to_i),
-      end_time:   DateTime.new(Date.today.year, month.to_i, day.to_i, end_hour.to_i, end_min.to_i)
-    }
-  end
-end
-
-mechanize = Mechanize.new
-
-kids = YAML.load_file('ce.yaml')['kids']
+config = YAML.load_file('ce.yaml')
 
 cal = Icalendar::Calendar.new
-cal.x_wr_calname = 'Challenge English'
+cal.x_wr_calname = 'Calendar Engine'
 
-kids.each do |kid|
-  page = login(mechanize, kid['username'], kid['password'])
-  get_lessons(mechanize, page).each do |lesson|
-    cal.event do |e|
-      e.summary     = "#{kid['name']} Challenge English"
-      e.dtstart     = lesson[:start_time]
-      e.dtend       = lesson[:end_time]
+# Looks like:
+#  {
+#    challenge_english: ChallengEnglish,
+#    comiru: Comiru
+#  }
+services = Hash[
+  ObjectSpace.each_object(Class)
+    .select { |klass| klass < Service }
+    .map { |klass| [klass.identifier, klass] }
+]
+
+config.each do |service_name, kids|
+  service_class = services[service_name.to_sym]
+  if service_class.nil?
+    raise "Invalid service name in config: #{service_name}"
+  end
+
+  kids.each do |kid|
+    service_class.new(kid).get_lessons.each do |lesson|
+      cal.event do |e|
+        e.summary = lesson[:description]
+        e.dtstart = lesson[:start_time]
+        e.dtend   = lesson[:end_time]
+      end
     end
   end
 end

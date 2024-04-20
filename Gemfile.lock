@@ -33,6 +33,8 @@ GEM
     nkf (0.2.0)
     nokogiri (1.15.6-arm64-darwin)
       racc (~> 1.4)
+    nokogiri (1.15.6-x86_64-linux)
+      racc (~> 1.4)
     public_suffix (5.0.5)
     racc (1.7.3)
     rubyntlm (0.6.3)
@@ -42,6 +44,7 @@ GEM
 
 PLATFORMS
   arm64-darwin-21
+  x86_64-linux
 
 DEPENDENCIES
   icalendar (= 2.10.1)

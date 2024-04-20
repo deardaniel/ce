@@ -1,6 +1,12 @@
-# Challenge English calendar
+# Calender Engine
 
-If you have a few children using Benesse's Challenge English, it's a pain to have to login for each to check when the next lessons are. This script scrapes the upcoming lesson schedules for each child's account, and creates iCalendar output. You can set up a cron job to save to a web-accessible file, and subscribe to that file's URL from your calendar to keep live updates.
+Scrape lesson information from different learning systems and generat iCalendar data.
+
+Supported systems:
+* Benesse's Challenge English Online Speaking
+* Comiru
+
+If you have a few children using these systems, it's a pain to have to login for each to check for upcoming lessons. This project scrapes the upcoming lesson schedules for each child's account, and creates iCalendar output. You can set up a cron job to save to a web-accessible file, and subscribe to that file's URL from your calendar to keep live updates.
 
 # Installing
 

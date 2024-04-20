@@ -1,7 +1,16 @@
-kids:
- - name: Hana
-   username: '1234567890'
-   password: 'tiger'
- - name: Shimajiro
-   username: '1234567891'
-   password: 'tiger'
+challenge_english
+  kids:
+   - name: Hana
+     username: '1234567890'
+     password: 'tiger'
+   - name: Shimajiro
+     username: '1234567891'
+     password: 'tiger'
+comiru
+  kids:
+   - name: Emmet
+     username: '123456'
+     password: 'block'
+   - name: Wyldstyle
+     username: '234567'
+     password: 'piece'
