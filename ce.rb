@@ -24,7 +24,7 @@ services = Hash[
 config.each do |service_name, kids|
   service_class = services[service_name.to_sym]
   if service_class.nil?
-    raise "Invalid service name in config: #{service_name}"
+    raise "Unknown service name in config: #{service_name}"
   end
 
   kids.each do |kid|
