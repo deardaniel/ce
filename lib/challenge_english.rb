@@ -1,17 +1,26 @@
+# typed: strict
+
 require_relative 'service'
 
 class ChallengeEnglish < Service
   LOGIN_URL = 'https://loginc.benesse.ne.jp/ce/login'
 
+  sig { returns(Symbol) }
   def self.identifier
     :challenge_english
   end
 
+  sig { params(kid: T::Hash[String, String]).void }
   def initialize(kid)
-    @name = kid['name']
-    @page = login(kid['username'], kid['password'])
+    raise 'Expected `name`' if kid['name'].nil?
+    raise 'Expected `username`' if kid['username'].nil?
+    raise 'Expected `password`' if kid['password'].nil?
+
+    @name = T.let(T.must(kid['name']), String)
+    @page = T.let(login(T.must(kid['username']), T.must(kid['password'])), Mechanize::Page)
   end
 
+  sig {params(username: String, password: String).returns(Mechanize::Page)}
   def login(username, password)
     mechanize = Mechanize.new
     page = mechanize.get(LOGIN_URL)
@@ -21,6 +30,7 @@ class ChallengeEnglish < Service
     form.submit
   end
 
+  sig {returns(T::Array[T::Hash[Symbol, T.any(String, DateTime)]])}
   def get_lessons
     dates = @page.search('.dataList dt')
     times = @page.search('.dataList dd')

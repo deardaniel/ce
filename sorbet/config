@@ -1,0 +1,6 @@
+--dir
+.
+--dir
+lib
+--ignore=tmp/
+--ignore=vendor/
