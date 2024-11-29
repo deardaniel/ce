@@ -12,7 +12,7 @@ cal.x_wr_calname = 'Calendar Engine'
 
 # Looks like:
 #  {
-#    challenge_english: ChallengEnglish,
+#    challenge_english: ChallengeEnglish,
 #    comiru: Comiru
 #  }
 services = Hash[
