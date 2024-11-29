@@ -22,7 +22,7 @@ class Comiru < Service
   end
 
   def get_lessons
-    @page.search('table')[1].search('tbody tr').map do |row|
+    @page.at("h2:contains('最近の授業スケジュール')").next.search('tbody tr').map do |row|
       date = row.search('td')[0].text
       year, month, day = date.scan(/(\d{4})-(\d{2})-(\d{2})/).first.map(&:to_i)
 
